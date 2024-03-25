@@ -20,6 +20,7 @@ plt.rcParams['figure.dpi'] = 300
 
 #%% Modules
 
+## Import this instead of copying the code
 class LoadImages:
     #Load MIP images exported from Zen Blue.
     def __init__(self, src):
@@ -61,7 +62,8 @@ class LoadImages:
         return LEL_mask, GBA_mask
     
 class Analysis:
-    
+    # Name the class more specifically, like GBAAnalysis
+    # Could identifyVascularNuclei and this class be combined? I'm noticing some shared features. Probably not worth the effort, but food for thought.
     def __init__(self, vessles, gba):
         self.vessle_int=vessles
         self.vessle_mask=self.get_vessle_mask()
@@ -135,6 +137,7 @@ class Analysis:
         plt.tight_layout()
         plt.savefig(f'./masks/{fname}.png')
         
+# All of this to go under a if __name__ == "__main__": block
 src=r'E:\Imaging\20240301 TifGBA GBA stacks\MIPs'
 os.chdir(src)
 

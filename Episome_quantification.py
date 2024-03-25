@@ -23,13 +23,20 @@ mpl.rcParams['ytick.labelleft']=False
 mpl.rcParams['savefig.pad_inches']=0.0
 plt.rcParams['figure.dpi'] = 300
 
+
+# Potentially change name to ImageLoader/ (imagetypename)Images or something to denote it being a class rather than a function
 class LoadImages:
     
     def __init__(self, src):
         self.src=src
         self.IndexImages()
+        # Potentially add all class properties here as empty variables. Makes it more clear what propertys the class has.
+        # If you don't want the user to change them, you can make them private by adding a _ before the name.
         
     def IndexImages(self):
+        # Rename dict to something more descriptive. Maybe image_dict or something.
+        # Pre-add the expected propertys to the dict declaration for clarity.
+        # Function names from Propercase to snake_case
         self.dict={}
         for file in os.listdir(self.src):
             self.dict[file]={}
@@ -86,6 +93,8 @@ class IdentifyVascularNuclei:
         self.find_vascular_nuclei()
     
     def get_vessle_mask(self, blur_sigma=8, thr_offset=0.8, opening_area=499, closing_area=499):
+        # I Would probably put a top level comment for these functions to explain what they do / why you chose the parameters you did. 
+        # I wouldn't say that necessary for most code, but if its for a paper that could be valuable.
         blur=gaussian(self.vessle_int, sigma=blur_sigma)
         mask=blur>threshold_otsu(blur)*thr_offset
         rm_small=area_opening(mask, area_threshold=opening_area)
@@ -115,7 +124,7 @@ class IdentifyVascularNuclei:
 #%% Segmentation of nuclear mask
 
 class NucleiSegmentation:
-    
+    # Definitely add a top level comment here to explain what the class does. Then one for each function.
     def __init__(self, nuc_mask):
         self.ori_nuc=nuc_mask
         self.objs=regionprops(ndi.label(self.ori_nuc)[0])
@@ -159,6 +168,8 @@ def IdentifyAdditionalNuc(nuc_int, nuc_mask, thr=6000):
     return nuc_mask+add_nuc
 
 #%% Generate all masks
+
+## Put all of this (Everything past this point) under a if __name__ == "__main__": block. This will prevent the code from running if you import this file as a module.
 src=r'E:\Tiffany GBA CMV\MIPs'
 os.chdir(src)
 images=LoadImages(src+"\SingleChannel")
@@ -234,6 +245,8 @@ for num, i in enumerate(list(images.dict.keys())):
 
     title = " ".join(i.split("_")[1:3] +[i.split("_")[-3]])
     
+
+    # Might be a nitpick, but I would combine these into a function with parameters for the parts you change.
     fig_vas, (ax1,ax2,ax3) = plt.subplots(nrows=1, ncols=3, figsize=(12,4))
     ax1.set_title('Vasculature')
     ax1.imshow(g)
